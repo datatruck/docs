@@ -1191,9 +1191,8 @@
           },
           "file_link": {
             "type": "string",
-            "format": "uri",
-            "example": "https://storage.example.com/docs/rc-12345.pdf",
-            "description": "URL to the document file."
+            "example": "2026/10/8/5555ef6d-ade2-4804-80d3-6098a0551837/rate-confirmation.pdf",
+            "description": "Storage path of the document file, as stored by Datatruck. This is usually a relative path rather than a full URL."
           },
           "uploaded_by": {
             "type": "string",
