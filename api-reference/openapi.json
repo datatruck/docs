@@ -919,7 +919,7 @@
         "required": [
           "id", "status", "created_datetime", "tags", "equipment_type",
           "equipment_type_child", "estimated_mile", "estimated_time",
-          "eta_detail", "trip", "batch_orders", "assigned_driver_n_truck",
+          "eta_detail", "trip", "trips", "batch_orders", "assigned_driver_n_truck",
           "assigned_carrier", "is_flagged", "documents", "stops"
         ],
         "properties": {
@@ -1127,7 +1127,19 @@
             "$ref": "#/components/schemas/ETADetail"
           },
           "trip": {
-            "$ref": "#/components/schemas/TripOrder"
+            "description": "The load's latest trip, or null when the load has no trip. Kept for existing clients; see `trips`.",
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/TripOrder"
+              }
+            ]
+          },
+          "trips": {
+            "type": "array",
+            "description": "Every trip of the load, newest first. A load moved across several trucks has one trip per move; the first item is the same trip as `trip`. Empty when the load has no trip.",
+            "items": {
+              "$ref": "#/components/schemas/TripOrder"
+            }
           },
           "batch_orders": {
             "$ref": "#/components/schemas/OrderFullBatchOrder"
@@ -1162,7 +1174,7 @@
           },
           "documents": {
             "type": "array",
-            "description": "Documents attached to the order (rate confirmation, bill of lading, proof of delivery, commercial invoice).",
+            "description": "Documents attached to the order, one item per file. Only rate confirmations, bills of lading and proofs of delivery are listed (a type can appear more than once), followed by the commercial invoice when the order has one. Other document types are not returned. Empty when the order has none of these.",
             "items": {
               "$ref": "#/components/schemas/OrderDocument"
             }
@@ -1179,15 +1191,14 @@
           },
           "file_link": {
             "type": "string",
-            "format": "uri",
-            "example": "https://storage.example.com/docs/rc-12345.pdf",
-            "description": "URL to the document file."
+            "example": "2026/10/8/5555ef6d-ade2-4804-80d3-6098a0551837/rate-confirmation.pdf",
+            "description": "Storage path of the document file, as stored by Datatruck. This is usually a relative path rather than a full URL."
           },
           "uploaded_by": {
             "type": "string",
             "nullable": true,
             "example": "John Doe",
-            "description": "Full name of the user who uploaded the document."
+            "description": "Full name of the user who uploaded the document. Always null for commercial_invoice, and null when the uploader is unknown."
           },
           "uploaded_at": {
             "type": "string",
@@ -1196,7 +1207,7 @@
             "description": "Timestamp when the document was uploaded."
           }
         },
-        "required": ["file_type", "file_link", "uploaded_at"]
+        "required": ["file_type", "file_link", "uploaded_by", "uploaded_at"]
       },
       "OrderListResponse": {
         "type": "object",
