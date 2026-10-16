@@ -196,15 +196,15 @@
             "name": "page",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "example": 1 },
+            "schema": { "type": "integer", "minimum": 1, "example": 1 },
             "description": "Page number for paginated results."
           },
           {
             "name": "page_size",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "example": 10, "maximum": 25 },
-            "description": "Number of results per page (max 25, default 10)."
+            "schema": { "oneOf": [ { "type": "integer", "minimum": 1, "example": 10 }, { "type": "string", "enum": ["all"] } ] },
+            "description": "Results per page. Default: 10. Use a positive integer, or `all` for every result on one page. No maximum."
           },
           {
             "name": "ordering",
@@ -321,22 +321,36 @@
     "/orders/dispatcher-board/list/": {
       "get": {
         "summary": "Dispatcher Board List",
-        "description": "Retrieve a paginated dispatcher board showing each dispatcher with their assigned drivers and aggregated trip statistics (total miles, gross, driver pay, RPM, trips).",
+        "description": "Retrieve a paginated dispatcher board showing each dispatcher with their assigned drivers and aggregated trip statistics (total miles, gross, driver pay, RPM, trips). The `start_date` and `end_date` query parameters are required.",
         "operationId": "getDispatcherBoard",
         "parameters": [
+          {
+            "name": "start_date",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "date", "example": "2026-08-01" },
+            "description": "Start of the date window, inclusive. Use the format YYYY-MM-DD. Trips count by pickup or delivery date, per the company payroll setting."
+          },
+          {
+            "name": "end_date",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "format": "date", "example": "2026-08-31" },
+            "description": "End of the date window, inclusive. Use the format YYYY-MM-DD."
+          },
           {
             "name": "page",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "example": 1 },
+            "schema": { "type": "integer", "minimum": 1, "example": 1 },
             "description": "Page number for paginated results."
           },
           {
             "name": "page_size",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "example": 10, "maximum": 25 },
-            "description": "Number of results per page (max 25, default 10)."
+            "schema": { "oneOf": [ { "type": "integer", "minimum": 1, "example": 10 }, { "type": "string", "enum": ["all"] } ] },
+            "description": "Results per page. Default: 10. Use a positive integer, or `all` for every result on one page. No maximum."
           }
         ],
         "responses": {
@@ -351,7 +365,7 @@
             }
           },
           "400": {
-            "description": "Invalid request parameters"
+            "description": "`start_date` or `end_date` is missing."
           }
         }
       }
@@ -366,15 +380,15 @@
             "name": "page",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "example": 1 },
+            "schema": { "type": "integer", "minimum": 1, "example": 1 },
             "description": "Page number for paginated results."
           },
           {
             "name": "page_size",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "example": 10, "maximum": 25 },
-            "description": "Number of results per page (max 25, default 10)."
+            "schema": { "oneOf": [ { "type": "integer", "minimum": 1, "example": 10 }, { "type": "string", "enum": ["all"] } ] },
+            "description": "Results per page. Default: 10. Use a positive integer, or `all` for every result on one page. No maximum."
           },
           {
             "name": "ordering",
@@ -415,15 +429,15 @@
             "name": "page",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "example": 1 },
+            "schema": { "type": "integer", "minimum": 1, "example": 1 },
             "description": "Page number for paginated results."
           },
           {
             "name": "page_size",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "example": 10, "maximum": 25 },
-            "description": "Number of results per page (max 25, default 10)."
+            "schema": { "oneOf": [ { "type": "integer", "minimum": 1, "example": 10 }, { "type": "string", "enum": ["all"] } ] },
+            "description": "Results per page. Default: 10. Use a positive integer, or `all` for every result on one page. No maximum."
           },
           {
             "name": "search",
@@ -464,15 +478,15 @@
             "name": "page",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "example": 1 },
+            "schema": { "type": "integer", "minimum": 1, "example": 1 },
             "description": "Page number for paginated results."
           },
           {
             "name": "page_size",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "example": 10, "maximum": 25 },
-            "description": "Number of results per page (max 25, default 10)."
+            "schema": { "oneOf": [ { "type": "integer", "minimum": 1, "example": 10 }, { "type": "string", "enum": ["all"] } ] },
+            "description": "Results per page. Default: 10. Use a positive integer, or `all` for every result on one page. No maximum."
           },
           {
             "name": "ordering",
