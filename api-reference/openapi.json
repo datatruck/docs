@@ -2780,10 +2780,16 @@
       }
     },
     "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer"
+      "tokenAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization",
+        "x-default": "Token <api-key>",
+        "description": "Send your API key with the `Token` prefix: `Authorization: Token <api-key>`."
       }
     }
-  }
+  },
+  "security": [
+    { "tokenAuth": [] }
+  ]
 }
